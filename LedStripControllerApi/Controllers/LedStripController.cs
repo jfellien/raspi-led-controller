@@ -54,12 +54,32 @@ public class LedStripController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("rainbow", Name = nameof(TurnOnWithColorName))]
+    [HttpPost("rainbow", Name = nameof(Rainbow))]
     public ActionResult Rainbow()
     {
         _logger.LogInformation("Show rainbow colors");
 
         _ledStrip.Rainbow();
+
+        return Ok();
+    }
+
+    [HttpPost("rainbow/scroll-ascending", Name = nameof(RainbowScrollAscending))]
+    public ActionResult RainbowScrollAscending()
+    {
+        _logger.LogInformation("Show rainbow colors ascending order");
+
+        _ledStrip.RainbowAscending();
+
+        return Ok();
+    }
+
+    [HttpPost("rainbow/scroll-descending", Name = nameof(RainbowDescending))]
+    public ActionResult RainbowDescending()
+    {
+        _logger.LogInformation("Show rainbow colors descending order");
+
+        _ledStrip.RainbowDescending();
 
         return Ok();
     }

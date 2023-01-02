@@ -8,4 +8,8 @@ public interface ILedStrip
     void TurnOff();
 
     void Rainbow();
+
+    void RainbowAscending();
+
+    void RainbowDescending();
 }
