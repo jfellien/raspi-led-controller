@@ -25,10 +25,10 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Install dependencies
-        run: dotnet restore .\LedStripControllerApi\
+        run: dotnet restore .\LedStripControllerApi\LedStripControllerApi.csproj
 
       - name: Build
-        run: dotnet build .\LedStripControllerApi\ --configuration Release --no-restore
+        run: dotnet build .\LedStripControllerApi\LedStripControllerApi.csproj --configuration Release --no-restore
 
       # We will output publish files to the folder we previously created
       - name: Publish
