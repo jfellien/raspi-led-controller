@@ -36,3 +36,9 @@ jobs:
       # We will output publish files to the folder we previously created
       - name: Publish
         run: dotnet publish $PROJECT --configuration Release -o /var/www/led-controller-api
+            
+      - name: Restart the app
+        run: |
+          export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          systemctl --user restart led-controller-api.service
+
