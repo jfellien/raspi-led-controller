@@ -6,7 +6,10 @@ on:
   push:    
     branches: [main]
 
-jobs:
+env:
+  PROJECT: ./LedStripControllerApi/LedStripControllerApi.csproj
+
+jobs:  
   deploy:
     # Our previously created self-hosted runner
     runs-on: self-hosted
@@ -25,11 +28,11 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Install dependencies
-        run: dotnet restore ./LedStripControllerApi/LedStripControllerApi.csproj
+        run: dotnet restore $PROJECT
 
       - name: Build
-        run: dotnet build ./LedStripControllerApi/LedStripControllerApi.csproj --configuration Release --no-restore
+        run: dotnet build $PROJECT --configuration Release --no-restore
 
       # We will output publish files to the folder we previously created
       - name: Publish
-        run: dotnet publish -c Release -o /var/www/led-controller-api
+        run: dotnet publish $PROJECT --configuration Release -o /var/www/led-controller-api
