@@ -105,46 +105,55 @@ internal class LedStrip : ILedStrip
         }
     }
 
-    public void Strobo(double seconds)
+    public async Task Strobo(double seconds, CancellationToken cancellation)
     {
         if(_isInSimulation) return;
 
         DateTimeOffset startTime = DateTimeOffset.UtcNow;
         DateTimeOffset stopTime = startTime.AddSeconds(seconds);
-
-        do 
+        
+        Task stroboTask = new Task(() => 
         {
+            while (stopTime > DateTimeOffset.UtcNow) 
+            {
 
-            TurnOn(Color.White);
+                TurnOn(Color.White);
 
-            Thread.Sleep(30);
+                Thread.Sleep(30);
 
-            TurnOff();
+                TurnOff();
 
-            Thread.Sleep(90);
+                Thread.Sleep(90);
 
-        } while (stopTime > DateTimeOffset.UtcNow);
+            }
+        });
+
+        await stroboTask;
     }
 
-    public void Strobo(double seconds, int onTimeInMilliseconds, int offTimeInMilliseconds)
+    public async Task Strobo(double seconds, int onTimeInMilliseconds, int offTimeInMilliseconds, CancellationToken cancellation)
     {
         if(_isInSimulation) return;
 
         DateTimeOffset startTime = DateTimeOffset.UtcNow;
         DateTimeOffset stopTime = startTime.AddSeconds(seconds);
 
-        do 
+        Task stroboTask = new Task(() => 
         {
+            while (stopTime > DateTimeOffset.UtcNow || cancellation.IsCancellationRequested == false) 
+            {
 
-            TurnOn(Color.White);
+                TurnOn(Color.White);
 
-            Thread.Sleep(onTimeInMilliseconds);
+                Thread.Sleep(onTimeInMilliseconds);
 
-            TurnOff();
+                TurnOff();
 
-            Thread.Sleep(offTimeInMilliseconds);
+                Thread.Sleep(offTimeInMilliseconds);
+            }
+        });
 
-        } while (stopTime > DateTimeOffset.UtcNow);
+        await stroboTask.ConfigureAwait(false);
     }
 
     public void RandomStrobo(double seconds)

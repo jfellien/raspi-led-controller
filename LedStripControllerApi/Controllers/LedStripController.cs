@@ -93,4 +93,27 @@ public class LedStripController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPost("strobo/{durationInSeconds}", Name = nameof(Strobo))]
+    public async Task<ActionResult> Strobo(int durationInSeconds)
+    {
+        _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
+
+        await _ledStrip.Strobo(durationInSeconds, CancellationToken.None);
+
+        return Accepted();
+    }
+
+    [HttpPost("strobo/{durationInSeconds}/{onTimeInMilliseconds}/{offTimeInMilliseconds}", Name = nameof(StroboControlled))]
+    public async Task<ActionResult> StroboControlled(int durationInSeconds, int onTimeInMilliseconds, int offTimeInMilliseconds)
+    {
+        _logger.LogInformation("Show strobo for {0} seconds and timings on: {1} ms, off: {2} ms", 
+                durationInSeconds, 
+                onTimeInMilliseconds, 
+                offTimeInMilliseconds);
+
+        await _ledStrip.Strobo(durationInSeconds, onTimeInMilliseconds, offTimeInMilliseconds, CancellationToken.None);
+
+        return Accepted();
+    }
 }
