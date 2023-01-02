@@ -126,4 +126,38 @@ public class LedStripController : ControllerBase
 
         return Accepted();
     }
+
+    [HttpPost("knight-rider/{colorName}/{loops}/{lengthOfLights}", Name = nameof(KnightRider))]
+    public async Task<ActionResult> KnightRider(string colorName, int loops, int lengthOfLights)
+    {
+        Color color = Color.Empty;
+
+        try
+        {
+           color = Color.FromName(colorName);
+        }
+        catch
+        {
+            string message = $"unknown color {colorName}";
+
+            _logger.LogError(message);
+
+            return BadRequest(message);
+        }
+
+        if(lengthOfLights > _ledStrip.NumberOfLeds)
+        {
+            string message = $"Too many lights requested {lengthOfLights}. The strip only can less than {_ledStrip.NumberOfLeds}.";
+
+            _logger.LogError(message);
+
+            return BadRequest(message);
+        }
+
+        _logger.LogInformation("Show knight rider for {0} times, color {1} and leght of light {2}", loops, colorName, lengthOfLights);
+
+        await _ledStrip.KnightRider(color, loops, lengthOfLights, CancellationToken.None);
+
+        return Accepted();
+    }
 }

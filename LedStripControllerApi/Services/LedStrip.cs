@@ -186,47 +186,58 @@ internal class LedStrip : ILedStrip
         await stroboTask;
     }
 
-    public void NightRider(Color color, int length = 5)
+    public async Task KnightRider(Color color, int length, int times, CancellationToken cancellation)
     {
         if(_isInSimulation) return;
 
         Clear();
 
-        BitmapImage image = _ledStrip.Image;
+        Task knightRiderTask = new Task(() =>{
 
-        for(int i = 0; i <= _numberOfLeds + length; i++)
-        {
-            if(i <= _numberOfLeds)
+            BitmapImage image = _ledStrip.Image;
+
+            for(int loopCount = 0; loopCount<= times; loopCount++){
+                
+                if(cancellation.IsCancellationRequested) return;
+
+                for(int i = 0; i <= _numberOfLeds + length; i++)
+                {
+                    if(i <= _numberOfLeds)
+                    {
+                        image.SetPixel(i, 0, color);
+                    }
+
+                    if(i - length >= 0)
+                    {
+                        image.SetPixel(i - length, 0, Color.Black);
+                    }
+
+                    Thread.Sleep(5);
+
+                    _ledStrip.Update();
+                }
+
+                for(int i = _numberOfLeds + length; i >= 0 - length; i--)
             {
-                image.SetPixel(i, 0, color);
+                if(i <= _numberOfLeds && i >= 0)
+                {
+                    image.SetPixel(i, 0, color);
+                }
+
+                if(i + length >= 0 && i + length <= _numberOfLeds)
+                {
+                    image.SetPixel(i + length, 0, Color.Black);
+                }
+
+                Thread.Sleep(5);
+
+                _ledStrip.Update();
             }
-
-            if(i - length >= 0)
-            {
-                image.SetPixel(i - length, 0, Color.Black);
+            
             }
+        });
 
-            Thread.Sleep(5);
-
-            _ledStrip.Update();
-        }
-
-        for(int i = _numberOfLeds + length; i >= 0 - length; i--)
-        {
-            if(i <= _numberOfLeds && i >= 0)
-            {
-                image.SetPixel(i, 0, color);
-            }
-
-            if(i + length >= 0 && i + length <= _numberOfLeds)
-            {
-                image.SetPixel(i + length, 0, Color.Black);
-            }
-
-            Thread.Sleep(5);
-
-            _ledStrip.Update();
-        }
+        await knightRiderTask;
     }
 
     public void RandomColor()
