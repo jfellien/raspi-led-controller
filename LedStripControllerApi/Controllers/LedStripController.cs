@@ -83,4 +83,14 @@ public class LedStripController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPost("random-color", Name = nameof(RandomColor))]
+    public ActionResult RandomColor()
+    {
+        _logger.LogInformation("Show a random color");
+
+        _ledStrip.RandomColor();
+
+        return Ok();
+    }
 }

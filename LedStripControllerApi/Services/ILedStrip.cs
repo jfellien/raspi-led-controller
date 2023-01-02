@@ -12,4 +12,6 @@ public interface ILedStrip
     void RainbowAscending();
 
     void RainbowDescending();
+
+    void RandomColor();
 }
