@@ -64,7 +64,7 @@ internal class LedStrip : ILedStrip
         Clear();
     }
 
-    public void RainbowStrip()
+    public void Rainbow()
     {
         if(_isInSimulation) return;
 

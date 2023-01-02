@@ -6,4 +6,6 @@ public interface ILedStrip
 {
     void TurnOn(Color color);
     void TurnOff();
+
+    void Rainbow();
 }

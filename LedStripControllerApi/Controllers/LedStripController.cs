@@ -53,4 +53,14 @@ public class LedStripController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPost("rainbow", Name = nameof(TurnOnWithColorName))]
+    public ActionResult Rainbow()
+    {
+        _logger.LogInformation("Show rainbow colors");
+
+        _ledStrip.Rainbow();
+
+        return Ok();
+    }
 }
