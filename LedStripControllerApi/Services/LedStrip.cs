@@ -156,7 +156,7 @@ internal class LedStrip : ILedStrip
         await stroboTask.ConfigureAwait(false);
     }
 
-    public void RandomStrobo(double seconds)
+    public async Task RandomStrobo(double seconds, CancellationToken cancellation)
     {
         if(_isInSimulation) return;
 
@@ -165,21 +165,25 @@ internal class LedStrip : ILedStrip
 
         Random rnd = new();
 
-        do 
+        Task stroboTask = new Task(() => 
         {
-            int randomWheel = rnd.Next(0, 255);
+            while (stopTime > DateTimeOffset.UtcNow) 
+            {
+                int randomWheel = rnd.Next(0, 255);
 
-            Color randomColor = Wheel(randomWheel);
-            
-            TurnOn(randomColor);
+                Color randomColor = Wheel(randomWheel);
+                
+                TurnOn(randomColor);
 
-            Thread.Sleep(30);
+                Thread.Sleep(30);
 
-            TurnOff();
+                TurnOff();
 
-            Thread.Sleep(90);
+                Thread.Sleep(90);
+            }
+        });
 
-        } while (stopTime > DateTimeOffset.UtcNow);
+        await stroboTask;
     }
 
     public void NightRider(Color color, int length = 5)

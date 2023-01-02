@@ -18,4 +18,6 @@ public interface ILedStrip
     Task Strobo(double seconds, CancellationToken cancellation);
 
     Task Strobo(double seconds, int onTimeInMilliseconds, int offTimeInMilliseconds, CancellationToken cancellation);
+
+    Task RandomStrobo(double seconds, CancellationToken cancellation);
 }

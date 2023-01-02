@@ -116,4 +116,14 @@ public class LedStripController : ControllerBase
 
         return Accepted();
     }
+
+    [HttpPost("strobo/random-color/{durationInSeconds}", Name = nameof(RandomStrobo))]
+    public async Task<ActionResult> RandomStrobo(int durationInSeconds)
+    {
+        _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
+
+        await _ledStrip.RandomStrobo(durationInSeconds, CancellationToken.None);
+
+        return Accepted();
+    }
 }
