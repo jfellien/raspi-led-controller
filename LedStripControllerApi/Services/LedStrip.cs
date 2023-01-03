@@ -105,14 +105,14 @@ internal class LedStrip : ILedStrip
         }
     }
 
-    public async Task Strobo(double seconds, CancellationToken cancellation)
+    public Task Strobo(double seconds, CancellationToken cancellation)
     {
-        if(_isInSimulation) return;
+        if(_isInSimulation) return Task.CompletedTask;
 
         DateTimeOffset startTime = DateTimeOffset.UtcNow;
         DateTimeOffset stopTime = startTime.AddSeconds(seconds);
         
-        Task stroboTask = new Task(() => 
+        Task stroboTask = Task.Run(() => 
         {
             while (stopTime > DateTimeOffset.UtcNow) 
             {
@@ -128,17 +128,17 @@ internal class LedStrip : ILedStrip
             }
         });
 
-        await stroboTask;
+        return stroboTask;
     }
 
-    public async Task Strobo(double seconds, int onTimeInMilliseconds, int offTimeInMilliseconds, CancellationToken cancellation)
+    public Task Strobo(double seconds, int onTimeInMilliseconds, int offTimeInMilliseconds, CancellationToken cancellation)
     {
-        if(_isInSimulation) return;
+        if(_isInSimulation) return Task.CompletedTask;
 
         DateTimeOffset startTime = DateTimeOffset.UtcNow;
         DateTimeOffset stopTime = startTime.AddSeconds(seconds);
 
-        Task stroboTask = new Task(() => 
+        Task stroboTask = Task.Run(() => 
         {
             while (stopTime > DateTimeOffset.UtcNow || cancellation.IsCancellationRequested == false) 
             {
@@ -153,19 +153,19 @@ internal class LedStrip : ILedStrip
             }
         });
 
-        await stroboTask.ConfigureAwait(false);
+        return stroboTask;
     }
 
-    public async Task RandomStrobo(double seconds, CancellationToken cancellation)
+    public Task RandomStrobo(double seconds, CancellationToken cancellation)
     {
-        if(_isInSimulation) return;
+        if(_isInSimulation) return  Task.CompletedTask;
 
         DateTimeOffset startTime = DateTimeOffset.UtcNow;
         DateTimeOffset stopTime = startTime.AddSeconds(seconds);
 
         Random rnd = new();
 
-        Task stroboTask = new Task(() => 
+        Task stroboTask = Task.Run(() => 
         {
             while (stopTime > DateTimeOffset.UtcNow) 
             {
@@ -183,16 +183,16 @@ internal class LedStrip : ILedStrip
             }
         });
 
-        await stroboTask;
+        return stroboTask;
     }
 
-    public async Task KnightRider(Color color, int length, int times, CancellationToken cancellation)
+    public Task KnightRider(Color color, int length, int times, CancellationToken cancellation)
     {
-        if(_isInSimulation) return;
+        if(_isInSimulation) return Task.CompletedTask;
 
         Clear();
 
-        Task knightRiderTask = new Task(() =>{
+        Task knightRiderTask = Task.Run(() =>{
 
             BitmapImage image = _ledStrip.Image;
 
@@ -237,7 +237,7 @@ internal class LedStrip : ILedStrip
             }
         });
 
-        await knightRiderTask;
+        return knightRiderTask;
     }
 
     public void RandomColor()
