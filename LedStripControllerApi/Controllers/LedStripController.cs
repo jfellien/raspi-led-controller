@@ -20,6 +20,8 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("turn-on/{colorName}", Name = nameof(TurnOnWithColorName))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult TurnOnWithColorName(string colorName)
     {
         Color color = Color.Empty;
@@ -45,6 +47,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("turn-off", Name = nameof(TurnOff))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult TurnOff()
     {
         _logger.LogInformation("LedStrip turns off");
@@ -55,6 +58,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("rainbow", Name = nameof(Rainbow))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult Rainbow()
     {
         _logger.LogInformation("Show rainbow colors");
@@ -65,6 +69,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("rainbow/scroll-ascending", Name = nameof(RainbowScrollAscending))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult RainbowScrollAscending()
     {
         _logger.LogInformation("Show rainbow colors ascending order");
@@ -75,6 +80,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("rainbow/scroll-descending", Name = nameof(RainbowDescending))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult RainbowDescending()
     {
         _logger.LogInformation("Show rainbow colors descending order");
@@ -85,6 +91,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("random-color", Name = nameof(RandomColor))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult RandomColor()
     {
         _logger.LogInformation("Show a random color");
@@ -95,40 +102,45 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("strobo/{durationInSeconds}", Name = nameof(Strobo))]
-    public async Task<ActionResult> Strobo(int durationInSeconds)
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    public Task<ActionResult> Strobo(int durationInSeconds)
     {
         _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
 
-        await _ledStrip.Strobo(durationInSeconds, CancellationToken.None).ConfigureAwait(false);
+        _ledStrip.Strobo(durationInSeconds, CancellationToken.None).ConfigureAwait(false);
 
-        return Accepted();
+        return Task.FromResult<ActionResult>(Accepted());
     }
 
     [HttpPost("strobo/{durationInSeconds}/{onTimeInMilliseconds}/{offTimeInMilliseconds}", Name = nameof(StroboControlled))]
-    public async Task<ActionResult> StroboControlled(int durationInSeconds, int onTimeInMilliseconds, int offTimeInMilliseconds)
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    public Task<ActionResult> StroboControlled(int durationInSeconds, int onTimeInMilliseconds, int offTimeInMilliseconds)
     {
         _logger.LogInformation("Show strobo for {0} seconds and timings on: {1} ms, off: {2} ms", 
                 durationInSeconds, 
                 onTimeInMilliseconds, 
                 offTimeInMilliseconds);
 
-        await _ledStrip.Strobo(durationInSeconds, onTimeInMilliseconds, offTimeInMilliseconds, CancellationToken.None).ConfigureAwait(false);
+        _ledStrip.Strobo(durationInSeconds, onTimeInMilliseconds, offTimeInMilliseconds, CancellationToken.None).ConfigureAwait(false);
 
-        return Accepted();
+        return Task.FromResult<ActionResult>(Accepted());
     }
 
     [HttpPost("strobo/random-color/{durationInSeconds}", Name = nameof(RandomStrobo))]
-    public async Task<ActionResult> RandomStrobo(int durationInSeconds)
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    public Task<ActionResult> RandomStrobo(int durationInSeconds)
     {
         _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
 
-        await _ledStrip.RandomStrobo(durationInSeconds, CancellationToken.None).ConfigureAwait(false);
+        _ledStrip.RandomStrobo(durationInSeconds, CancellationToken.None).ConfigureAwait(false);
 
-        return Accepted();
+        return Task.FromResult<ActionResult>(Accepted());
     }
 
     [HttpPost("knight-rider/{colorName}/{loops}/{lengthOfLights}", Name = nameof(KnightRider))]
-    public async Task<ActionResult> KnightRider(string colorName, int loops, int lengthOfLights)
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<ActionResult> KnightRider(string colorName, int loops, int lengthOfLights)
     {
         Color color = Color.Empty;
 
@@ -142,7 +154,7 @@ public class LedStripController : ControllerBase
 
             _logger.LogError(message);
 
-            return BadRequest(message);
+            return Task.FromResult<ActionResult>(BadRequest(message));
         }
 
         if(lengthOfLights > _ledStrip.NumberOfLeds)
@@ -151,13 +163,13 @@ public class LedStripController : ControllerBase
 
             _logger.LogError(message);
 
-            return BadRequest(message);
+            return Task.FromResult<ActionResult>(BadRequest(message));
         }
 
         _logger.LogInformation("Show knight rider for {0} times, color {1} and leght of light {2}", loops, colorName, lengthOfLights);
 
-        await _ledStrip.KnightRider(color, loops, lengthOfLights, CancellationToken.None).ConfigureAwait(false);
+        _ledStrip.KnightRider(color, loops, lengthOfLights, CancellationToken.None).ConfigureAwait(false);
 
-        return Accepted();
+        return Task.FromResult<ActionResult>(Accepted());
     }
 }
