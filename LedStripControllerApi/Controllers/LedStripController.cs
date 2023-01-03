@@ -20,6 +20,8 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("turn-on/{colorName}", Name = nameof(TurnOnWithColorName))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult TurnOnWithColorName(string colorName)
     {
         Color color = Color.Empty;
@@ -45,6 +47,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("turn-off", Name = nameof(TurnOff))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult TurnOff()
     {
         _logger.LogInformation("LedStrip turns off");
@@ -55,6 +58,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("rainbow", Name = nameof(Rainbow))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult Rainbow()
     {
         _logger.LogInformation("Show rainbow colors");
@@ -65,6 +69,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("rainbow/scroll-ascending", Name = nameof(RainbowScrollAscending))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult RainbowScrollAscending()
     {
         _logger.LogInformation("Show rainbow colors ascending order");
@@ -75,6 +80,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("rainbow/scroll-descending", Name = nameof(RainbowDescending))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult RainbowDescending()
     {
         _logger.LogInformation("Show rainbow colors descending order");
@@ -85,6 +91,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("random-color", Name = nameof(RandomColor))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult RandomColor()
     {
         _logger.LogInformation("Show a random color");
@@ -95,6 +102,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("strobo/{durationInSeconds}", Name = nameof(Strobo))]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
     public Task<ActionResult> Strobo(int durationInSeconds)
     {
         _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
@@ -105,6 +113,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("strobo/{durationInSeconds}/{onTimeInMilliseconds}/{offTimeInMilliseconds}", Name = nameof(StroboControlled))]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
     public Task<ActionResult> StroboControlled(int durationInSeconds, int onTimeInMilliseconds, int offTimeInMilliseconds)
     {
         _logger.LogInformation("Show strobo for {0} seconds and timings on: {1} ms, off: {2} ms", 
@@ -118,6 +127,7 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("strobo/random-color/{durationInSeconds}", Name = nameof(RandomStrobo))]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
     public Task<ActionResult> RandomStrobo(int durationInSeconds)
     {
         _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
@@ -128,6 +138,8 @@ public class LedStripController : ControllerBase
     }
 
     [HttpPost("knight-rider/{colorName}/{loops}/{lengthOfLights}", Name = nameof(KnightRider))]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<ActionResult> KnightRider(string colorName, int loops, int lengthOfLights)
     {
         Color color = Color.Empty;
