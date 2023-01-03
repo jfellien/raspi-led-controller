@@ -114,9 +114,8 @@ internal class LedStrip : ILedStrip
         
         Task stroboTask = Task.Run(() => 
         {
-            while (stopTime > DateTimeOffset.UtcNow) 
+            while (stopTime > DateTimeOffset.UtcNow && cancellation.IsCancellationRequested == false) 
             {
-
                 TurnOn(Color.White);
 
                 Thread.Sleep(30);
@@ -140,9 +139,8 @@ internal class LedStrip : ILedStrip
 
         Task stroboTask = Task.Run(() => 
         {
-            while (stopTime > DateTimeOffset.UtcNow || cancellation.IsCancellationRequested == false) 
+            while (stopTime > DateTimeOffset.UtcNow && cancellation.IsCancellationRequested == false) 
             {
-
                 TurnOn(Color.White);
 
                 Thread.Sleep(onTimeInMilliseconds);
@@ -167,7 +165,7 @@ internal class LedStrip : ILedStrip
 
         Task stroboTask = Task.Run(() => 
         {
-            while (stopTime > DateTimeOffset.UtcNow) 
+            while (stopTime > DateTimeOffset.UtcNow && cancellation.IsCancellationRequested == false) 
             {
                 int randomWheel = rnd.Next(0, 255);
 
