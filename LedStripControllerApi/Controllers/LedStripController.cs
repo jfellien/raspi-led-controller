@@ -99,7 +99,7 @@ public class LedStripController : ControllerBase
     {
         _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
 
-        await _ledStrip.Strobo(durationInSeconds, CancellationToken.None);
+        await _ledStrip.Strobo(durationInSeconds, CancellationToken.None).ConfigureAwait(false);
 
         return Accepted();
     }
@@ -112,7 +112,7 @@ public class LedStripController : ControllerBase
                 onTimeInMilliseconds, 
                 offTimeInMilliseconds);
 
-        await _ledStrip.Strobo(durationInSeconds, onTimeInMilliseconds, offTimeInMilliseconds, CancellationToken.None);
+        await _ledStrip.Strobo(durationInSeconds, onTimeInMilliseconds, offTimeInMilliseconds, CancellationToken.None).ConfigureAwait(false);
 
         return Accepted();
     }
@@ -122,7 +122,7 @@ public class LedStripController : ControllerBase
     {
         _logger.LogInformation("Show strobo for {0} seconds", durationInSeconds);
 
-        await _ledStrip.RandomStrobo(durationInSeconds, CancellationToken.None);
+        await _ledStrip.RandomStrobo(durationInSeconds, CancellationToken.None).ConfigureAwait(false);
 
         return Accepted();
     }
@@ -156,7 +156,7 @@ public class LedStripController : ControllerBase
 
         _logger.LogInformation("Show knight rider for {0} times, color {1} and leght of light {2}", loops, colorName, lengthOfLights);
 
-        await _ledStrip.KnightRider(color, loops, lengthOfLights, CancellationToken.None);
+        await _ledStrip.KnightRider(color, loops, lengthOfLights, CancellationToken.None).ConfigureAwait(false);
 
         return Accepted();
     }
